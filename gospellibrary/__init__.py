@@ -194,7 +194,15 @@ class ItemPackage:
     def subitems(self):
         c = self.db.cursor()
         try:
-            return [Subitem(id=row[0], uri=row[1]) for row in c.execute('''SELECT _id, uri FROM subitem ORDER BY position''')]
+            return [Subitem(
+                id=row[0],
+                uri=row[1],
+                title=row[2],
+                short_title=row[3],
+                primary_title_component=row[4],
+                secondary_title_component=row[5],
+                web_url=row[6]) for row in
+                    c.execute('''SELECT _id, uri, title, short_title, primary_title_component, secondary_title_component, web_url FROM subitem ORDER BY position''')]
         finally:
             c.close()
 
@@ -239,11 +247,23 @@ class ItemPackage:
 
 
 class Subitem:
-    def __init__(self, id, uri):
+    def __init__(self, id, uri, title, short_title, primary_title_component,
+                secondary_title_component, web_url):
         self.id = id
         self.uri = uri
+        self.title = title
+        self.short_title = short_title
+        self.primary_title_component = primary_title_component
+        self.secondary_title_component = secondary_title_component
+        self.web_url = web_url
 
-    __repr__ = GetattrRepr('id', uri='uri')
+    __repr__ = GetattrRepr('id',
+                           uri='uri',
+                           title='title',
+                           short_title='short_title',
+                           primary_title_component='primary_title_component',
+                           secondary_title_component='secondary_title_component',
+                           web_url='web_url')
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
