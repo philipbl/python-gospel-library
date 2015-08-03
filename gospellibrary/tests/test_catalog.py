@@ -65,7 +65,8 @@ class Test(unittest.TestCase):
                 RelatedAudioItem(
                     id=37,
                     subitem_id=subitem_id,
-                    media_url='http://media2.ldscdn.org/assets/scripture-and-lesson-support/new-testament-stories/2010-11-370-chapter-36-jesus-tells-three-parables-complete-256k-eng.mp3')
+                    media_url='http://media2.ldscdn.org/assets/scripture-and-lesson-support/new-testament-stories/2010-11-370-chapter-36-jesus-tells-three-parables-complete-256k-eng.mp3',
+                    file_size=9248128)
             ]
 
             self.assertEqual(expected, actual)

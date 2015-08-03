@@ -212,8 +212,9 @@ class ItemPackage:
             return [RelatedAudioItem(
                 id=row[0],
                 subitem_id=row[1],
-                media_url=row[2]) for row in
-                    c.execute('''SELECT _id, subitem_id, media_url FROM related_audio_item WHERE subitem_id=?''', [subitem_id])]
+                media_url=row[2],
+                file_size=row[3]) for row in
+                    c.execute('''SELECT _id, subitem_id, media_url, file_size FROM related_audio_item WHERE subitem_id=?''', [subitem_id])]
         finally:
             c.close()
 
@@ -280,12 +281,14 @@ class Subitem:
 
 
 class RelatedAudioItem:
-    def __init__(self, id, subitem_id, media_url):
+    def __init__(self, id, subitem_id, media_url, file_size):
         self.id = id
         self.subitem_id = subitem_id
         self.media_url = media_url
+        self.file_size = file_size
 
-    __repr__ = GetattrRepr('id', subitem_id='subitem_id', media_url='media_url')
+    __repr__ = GetattrRepr('id', subitem_id='subitem_id', media_url='media_url',
+                           file_size='file_size')
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
