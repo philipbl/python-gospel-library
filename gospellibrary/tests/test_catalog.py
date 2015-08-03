@@ -45,7 +45,12 @@ class Test(unittest.TestCase):
             expected = [
                 Subitem(
                     id=1,
-                    uri='/manual/all-is-safely-gathered-in-family-finances/all-is-safely-gathered-in-family-finances')
+                    uri='/manual/all-is-safely-gathered-in-family-finances/all-is-safely-gathered-in-family-finances',
+                    title='All Is Safely Gathered In: Family Finances',
+                    short_title=None,
+                    primary_title_component=None,
+                    secondary_title_component=None,
+                    web_url='http://www.lds.org/manual/all-is-safely-gathered-in-family-finances/all-is-safely-gathered-in-family-finances')
             ]
 
             self.assertEqual(expected, actual)
