@@ -246,6 +246,33 @@ class ItemPackage:
         finally:
             c.close()
 
+    def nav_items(self, subitem_id):
+        c = self.db.cursor()
+        try:
+            return [NavItem(
+                id=row[0],
+                subitem_id=row[1],
+                nav_section_id=row[2],
+                title=row[3],
+                short_title=row[4],
+                primary_title_component=row[5],
+                secondary_title_component=row[6],
+                preview=row[7]) for row in
+                    c.execute('''SELECT _id, subitem_id, nav_section_id, title, short_title, primary_title_component, secondary_title_component, preview FROM nav_item WHERE subitem_id=?''', [subitem_id])]
+        finally:
+            c.close()
+
+    def nav_section(self, nav_section_id):
+        c = self.db.cursor()
+        try:
+            return [NavSection(
+                id=row[0],
+                nav_collection_id=row[1],
+                title=row[2]) for row in
+                    c.execute('''SELECT _id, nav_collection_id, title FROM nav_section WHERE _id=?''', [nav_section_id])]
+        finally:
+            c.close()
+
 
 class Subitem:
     def __init__(self, id, uri, title, short_title, primary_title_component,
@@ -326,6 +353,7 @@ class RelatedVideoItem:
     def __hash__(self):
         return hash(tuple(sorted(self.__dict__.items())))
 
+
 class RelatedContentItem:
     def __init__(self, id, subitem_id, position, name, label, label_content, origin_uri, content):
         self.id = id
@@ -345,6 +373,65 @@ class RelatedContentItem:
                            label_content='label_content',
                            origin_uri='origin_uri',
                            content='content')
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
+
+class NavItem:
+    def __init__(self, id, subitem_id, nav_section_id, title, short_title,
+                 primary_title_component, secondary_title_component, preview):
+        self.id = id
+        self.subitem_id = subitem_id
+        self.nav_section_id = nav_section_id
+        self.title = title
+        self.short_title = short_title
+        self.primary_title_component = primary_title_component
+        self.secondary_title_component = secondary_title_component
+        self.preview = preview
+
+    __repr__ = GetattrRepr('id',
+                           subitem_id='subitem_id',
+                           nav_section_id='nav_section_id',
+                           title='title',
+                           short_title='short_title',
+                           primary_title_component='primary_title_component',
+                           secondary_title_component='secondary_title_component',
+                           preview='preview')
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
+
+class NavSection:
+    def __init__(self, id, nav_collection_id, title):
+        self.id = id
+        self.nav_collection_id = nav_collection_id
+        self.title = title
+
+    __repr__ = GetattrRepr('id',
+                           nav_collection_id='nav_collection_id',
+                           title='title')
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

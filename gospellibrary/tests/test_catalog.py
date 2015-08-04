@@ -1,5 +1,6 @@
 import unittest
-from gospellibrary import Catalog, Subitem, RelatedAudioItem, RelatedVideoItem, RelatedContentItem
+from gospellibrary import Catalog, Subitem, RelatedAudioItem, RelatedVideoItem, \
+                          RelatedContentItem, NavItem, NavSection
 import logging
 import bs4
 import requests
@@ -104,6 +105,42 @@ class Test(unittest.TestCase):
                     label_content='truth',
                     origin_uri='/scriptures/ot/ps/117.2',
                     content='<a href="/scriptures/dc-testament/dc/84.45" class="scriptureRef">D&amp;C 84:45</a>; <a href="/scriptures/dc-testament/dc/93.24" class="scriptureRef">93:24</a>.')
+            ]
+
+            self.assertEqual(expected, actual)
+
+    def test_package_nav_items(self):
+        with Catalog(session=session).item(uri='/liahona/1993/11', lang='eng').package() as package:
+            subitem_id = 12
+
+            actual = package.nav_items(subitem_id)
+
+            expected = [
+                NavItem(
+                    id=12,
+                    subitem_id=subitem_id,
+                    nav_section_id=1,
+                    title='Sharing Time: Warning!',
+                    short_title=None,
+                    primary_title_component=None,
+                    secondary_title_component=None,
+                    preview="“I have warned you, and forewarn you, by giving unto you this word of wisdom by revelation” (D&C 89:4).")
+            ]
+
+            self.assertEqual(expected, actual)
+
+    def test_package_nav_section(self):
+        with Catalog(session=session).item(uri='/general-conference/2013/04', lang='eng').package() as package:
+            subitem_id = 23
+            nav_item = package.nav_items(subitem_id)[0]
+
+            actual = package.nav_section(nav_item.nav_section_id)
+
+            expected = [
+                NavSection(
+                    id=4,
+                    nav_collection_id=1,
+                    title="Sunday Morning Session")
             ]
 
             self.assertEqual(expected, actual)
