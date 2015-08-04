@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 from gospellibrary import Catalog, Subitem, RelatedAudioItem, RelatedVideoItem, \
                           RelatedContentItem, NavItem, NavSection
